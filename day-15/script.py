@@ -2,7 +2,7 @@ def get_start_params(inp):
     mem = {}
     latest = inp.pop()
     for i, v in enumerate(inp):
-        mem[v] = [i]
+        mem[v] = i
     return latest, mem
 
 
@@ -11,14 +11,16 @@ def main():
     latest, mem = get_start_params(start)
     i = len(mem.values())
     while i < 30000000:
-        print("Turn %03d: %s" % (i+1, latest))
+        if (i+1) % 10000 == 0:
+            print("Turn %03d: %s" % (i+1, latest))
         new = latest not in mem.keys()
         if new:
-            mem[latest] = [i]
+            mem[latest] = i
             latest = 0
         else:
-            mem[latest].append(i)
-            latest = mem[latest][-1] - mem[latest][-2]
+            next_one = i - mem[latest]
+            mem[latest] = i
+            latest = next_one
         i += 1
 
 
